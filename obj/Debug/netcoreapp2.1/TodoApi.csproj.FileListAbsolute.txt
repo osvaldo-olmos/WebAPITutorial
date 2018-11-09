@@ -26,3 +26,5 @@
 /Users/osvaldoolmos/repos/TodoApiInprogress/obj/Debug/netcoreapp2.1/TodoApi.RazorTargetAssemblyInfo.cache
 /Users/osvaldoolmos/repos/TodoApiInprogress/obj/Debug/netcoreapp2.1/TodoApi.dll
 /Users/osvaldoolmos/repos/TodoApiInprogress/obj/Debug/netcoreapp2.1/TodoApi.pdb
+/Users/osvaldoolmos/repos/TodoApiInprogress/bin/Debug/netcoreapp2.1/TodoApi.xml
+/Users/osvaldoolmos/repos/TodoApiInprogress/obj/Debug/netcoreapp2.1/TodoApi.xml
