@@ -7,33 +7,33 @@ namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoController : ControllerBase
+    public class TaskController : ControllerBase
     {
-        private readonly TodoContext _context;
+        private readonly TaskContext _context;
 
-        public TodoController(TodoContext context)
+        public TaskController(TaskContext context)
         {
             _context = context;
 
-            if (_context.TodoItems.Count() == 0)
+            if (_context.TaskItems.Count() == 0)
             {
                 // Create a new TodoItem if collection is empty,
                 // which means you can't delete all TodoItems.
-                _context.TodoItems.Add(new TodoItem { Name = "Item1" });
+                _context.TaskItems.Add(new TaskItem { Name = "Item1" });
                 _context.SaveChanges();
             }
         }
 
         [HttpGet]
-        public ActionResult<List<TodoItem>> GetAll()
+        public ActionResult<List<TaskItem>> GetAll()
         {
-            return _context.TodoItems.ToList();
+            return _context.TaskItems.ToList();
         }
 
-        [HttpGet("{id}", Name = "GetTodo")]
-        public ActionResult<TodoItem> GetById(long id)
+        [HttpGet("{id}", Name = "GetTask")]
+        public ActionResult<TaskItem> GetById(long id)
         {
-            var item = _context.TodoItems.Find(id);
+            var item = _context.TaskItems.Find(id);
             if (item == null)
             {
                 return NotFound();
@@ -42,18 +42,18 @@ namespace TodoApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(TodoItem item)
+        public IActionResult Create(TaskItem item)
         {
-            _context.TodoItems.Add(item);
+            _context.TaskItems.Add(item);
             _context.SaveChanges();
 
-            return CreatedAtRoute("GetTodo", new { id = item.Id }, item);
+            return CreatedAtRoute("GetTask", new { id = item.Id }, item);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, TodoItem item)
+        public IActionResult Update(long id, TaskItem item)
         {
-            var todo = _context.TodoItems.Find(id);
+            var todo = _context.TaskItems.Find(id);
             if (todo == null)
             {
                 return NotFound();
@@ -62,25 +62,25 @@ namespace TodoApi.Controllers
             todo.IsComplete = item.IsComplete;
             todo.Name = item.Name;
 
-            _context.TodoItems.Update(todo);
+            _context.TaskItems.Update(todo);
             _context.SaveChanges();
             return NoContent();
         }
 
         /// <summary>
-        /// Deletes a specific TodoItem.
+        /// Deletes a specific TaskItem.
         /// </summary>
         /// <param name="id"></param> 
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            var todo = _context.TodoItems.Find(id);
+            var todo = _context.TaskItems.Find(id);
             if (todo == null)
             {
                 return NotFound();
             }
 
-            _context.TodoItems.Remove(todo);
+            _context.TaskItems.Remove(todo);
             _context.SaveChanges();
             return NoContent();
         }
