@@ -44,6 +44,10 @@ namespace TodoApi.Controllers
         [HttpPost]
         public IActionResult Create(TaskItem item)
         {
+            if(item.Status !=TaskStatus.Todo)
+            {
+                return BadRequest($"No se puede crear una tarea con estado {item.Status}");
+            }
             _context.TaskItems.Add(item);
             _context.SaveChanges();
 
@@ -53,16 +57,23 @@ namespace TodoApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(long id, TaskItem item)
         {
-            var todo = _context.TaskItems.Find(id);
-            if (todo == null)
+            var task = _context.TaskItems.Find(id);
+            if (task == null)
             {
                 return NotFound();
             }
 
-            todo.IsComplete = item.IsComplete;
-            todo.Name = item.Name;
+            //Si el item esta finalizado, no se puede updetear
+            if(task.Status == TaskStatus.Canceled &&
+            item.Status == TaskStatus.Done)
+            {
+                return BadRequest("No se puede pasar una tarea cancelada a finalizada");
+            }
 
-            _context.TaskItems.Update(todo);
+            task.Status = item.Status;
+            task.Name = item.Name;
+
+            _context.TaskItems.Update(task);
             _context.SaveChanges();
             return NoContent();
         }

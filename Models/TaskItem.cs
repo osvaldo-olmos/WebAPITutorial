@@ -1,9 +1,17 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace TodoApi.Models
 {
     public class TaskItem
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public bool IsComplete { get; set; }
+        [Range (0,4)]
+        public TaskStatus Status { get; set; }
+
+        public TaskItem()
+        {
+            Status =TaskStatus.Todo;
+        }
     }
 }
