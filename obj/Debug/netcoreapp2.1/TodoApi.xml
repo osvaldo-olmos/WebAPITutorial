@@ -4,7 +4,7 @@
         <name>TodoApi</name>
     </assembly>
     <members>
-        <member name="M:TodoApi.Controllers.TodoController.Delete(System.Int64)">
+        <member name="M:TodoApi.Controllers.TaskController.Delete(System.Int64)">
             <summary>
             Deletes a specific TodoItem.
             </summary>
