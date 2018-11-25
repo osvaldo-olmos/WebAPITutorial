@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using TodoApi.Models;
+using TodoApi.DTOs;
 
 namespace TodoApi.Controllers
 {
@@ -42,16 +43,13 @@ namespace TodoApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(TaskItem item)
+        public IActionResult Create(CreateTaskDTO taskDTO)
         {
-            if(item.Status !=TaskStatus.Todo)
-            {
-                return BadRequest($"No se puede crear una tarea con estado {item.Status}");
-            }
-            _context.TaskItems.Add(item);
+            TaskItem task =new TaskItem {Name = taskDTO.Name};
+            _context.TaskItems.Add(task);
             _context.SaveChanges();
 
-            return CreatedAtRoute("GetTask", new { id = item.Id }, item);
+            return CreatedAtRoute("GetTask", new { id = task.Id }, task);
         }
 
         [HttpPut("{id}")]
