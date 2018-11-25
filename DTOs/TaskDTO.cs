@@ -1,4 +1,4 @@
-namespace TodoApi.DTOs
+namespace TaskApi.DTOs
 {
     public class TaskDTO
     {

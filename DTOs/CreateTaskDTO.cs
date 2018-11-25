@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TodoApi.DTOs
+namespace TaskApi.DTOs
 {
     public class CreateTaskDTO : IValidatableObject
     {

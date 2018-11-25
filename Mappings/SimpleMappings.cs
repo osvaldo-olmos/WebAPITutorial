@@ -1,8 +1,8 @@
 using AutoMapper;
-using TodoApi.DTOs;
-using TodoApi.Models;
+using TaskApi.DTOs;
+using TaskApi.Models;
 
-namespace TodoApi.Mappings
+namespace TaskApi.Mappings
 {
     public class SimpleMappings : Profile
     {

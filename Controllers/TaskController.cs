@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using TodoApi.Models;
-using TodoApi.DTOs;
+using TaskApi.Models;
+using TaskApi.DTOs;
 using AutoMapper;
 
-namespace TodoApi.Controllers
+namespace TaskApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
