@@ -9,6 +9,8 @@ namespace TodoApi.Mappings
         public SimpleMappings()
         {
             CreateMap<TaskItem, CreateTaskDTO>().ReverseMap();
+            CreateMap<TaskItem, TaskDTO>();
+            CreateMap<UpdateTaskDTO, TaskItem>();
         }
     }
 }

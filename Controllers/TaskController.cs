@@ -35,14 +35,14 @@ namespace TodoApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTask")]
-        public ActionResult<TaskItem> GetById(long id)
+        public ActionResult<TaskDTO> GetById(long id)
         {
-            var item = _context.TaskItems.Find(id);
-            if (item == null)
+            var task = _context.TaskItems.Find(id);
+            if (task == null)
             {
                 return NotFound();
             }
-            return item;
+            return _mapper.Map<TaskDTO>(task);
         }
 
         [HttpPost]
@@ -57,8 +57,10 @@ namespace TodoApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, TaskItem item)
+        public IActionResult Update(long id, UpdateTaskDTO item)
         {
+            TaskItem updatedTask = _mapper.Map<TaskItem>(item);
+            
             var task = _context.TaskItems.Find(id);
             if (task == null)
             {
@@ -67,13 +69,13 @@ namespace TodoApi.Controllers
 
             //Si el item esta finalizado, no se puede updetear
             if(task.Status == TaskStatus.Canceled &&
-            item.Status == TaskStatus.Done)
+            updatedTask.Status == TaskStatus.Done)
             {
                 return BadRequest("No se puede pasar una tarea cancelada a finalizada");
             }
 
-            task.Status = item.Status;
-            task.Name = item.Name;
+            task.Status = updatedTask.Status;
+            task.Name = updatedTask.Name;
 
             _context.TaskItems.Update(task);
             _context.SaveChanges();
