@@ -29,9 +29,9 @@ namespace TodoApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<TaskItem>> GetAll()
+        public ActionResult<List<TaskDTO>> GetAll()
         {
-            return _context.TaskItems.ToList();
+            return _mapper.Map<List<TaskDTO>>(_context.TaskItems.ToList());
         }
 
         [HttpGet("{id}", Name = "GetTask")]

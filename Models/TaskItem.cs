@@ -6,7 +6,6 @@ namespace TodoApi.Models
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        [Range (0,4)]
         public TaskStatus Status { get; set; }
 
         public TaskItem()
