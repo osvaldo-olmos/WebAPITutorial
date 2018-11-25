@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TodoApi.Models;
 using TodoApi.DTOs;
+using AutoMapper;
 
 namespace TodoApi.Controllers
 {
@@ -11,10 +12,12 @@ namespace TodoApi.Controllers
     public class TaskController : ControllerBase
     {
         private readonly TaskContext _context;
+        private readonly IMapper _mapper;
 
-        public TaskController(TaskContext context)
+        public TaskController(TaskContext context, IMapper mapper)
         {
             _context = context;
+             _mapper = mapper; //injected automapper
 
             if (_context.TaskItems.Count() == 0)
             {
@@ -45,7 +48,8 @@ namespace TodoApi.Controllers
         [HttpPost]
         public IActionResult Create(CreateTaskDTO taskDTO)
         {
-            TaskItem task =new TaskItem {Name = taskDTO.Name};
+            //TaskItem task =new TaskItem {Name = taskDTO.Name};
+            TaskItem task =_mapper.Map<TaskItem>(taskDTO);
             _context.TaskItems.Add(task);
             _context.SaveChanges();
 
