@@ -1,7 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using TaskApi.DTO;
 using TaskApi.Models;
+using TodoApi.DTO;
 
 namespace TaskApi.Controllers
 {
@@ -10,10 +13,12 @@ namespace TaskApi.Controllers
     public class TaskController : ControllerBase
     {
         private readonly TaskContext _context;
+        private readonly IMapper _mapper;
 
-        public TaskController(TaskContext context)
+        public TaskController(TaskContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
 
             if (_context.TaskItems.Count() == 0)
             {
@@ -25,38 +30,37 @@ namespace TaskApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<TaskItem>> GetAll()
+        public ActionResult<List<TaskDTO>> GetAll()
         {
-            return _context.TaskItems.ToList();
+            return _mapper.Map<List<TaskDTO>>(_context.TaskItems.ToList());
         }
 
         [HttpGet("{id}", Name = "GetTask")]
-        public ActionResult<TaskItem> GetById(long id)
+        public ActionResult<TaskDTO> GetById(long id)
         {
             var item = _context.TaskItems.Find(id);
             if (item == null)
             {
                 return NotFound();
             }
-            return item;
+            return _mapper.Map<TaskDTO>(item);
         }
 
         [HttpPost]
-        public IActionResult Create(TaskItem item)
+        public IActionResult Create(CreateTaskDTO taskDTO)
         {
-            if(item.Status !=TaskStatus.Todo)
-            {
-                return BadRequest($"No se puede crear una tarea con estado {item.Status}");
-            }
-            _context.TaskItems.Add(item);
+            TaskItem task =_mapper.Map<TaskItem>(taskDTO);
+            _context.TaskItems.Add(task);
             _context.SaveChanges();
 
-            return CreatedAtRoute("GetTask", new { id = item.Id }, item);
+            return CreatedAtRoute("GetTask", new { id = task.Id }, task);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, TaskItem item)
+        public IActionResult Update(long id, UpdateTaskDTO item)
         {
+            TaskItem updatedTask =_mapper.Map<TaskItem>(item);
+
             var task = _context.TaskItems.Find(id);
             if (task == null)
             {
@@ -65,13 +69,13 @@ namespace TaskApi.Controllers
 
             //Si el item esta finalizado, no se puede updetear
             if(task.Status == TaskStatus.Canceled &&
-            item.Status == TaskStatus.Done)
+            updatedTask.Status == TaskStatus.Done)
             {
                 return BadRequest("No se puede pasar una tarea cancelada a finalizada");
             }
 
-            task.Status = item.Status;
-            task.Name = item.Name;
+            task.Status = updatedTask.Status;
+            task.Name = updatedTask.Name;
 
             _context.TaskItems.Update(task);
             _context.SaveChanges();

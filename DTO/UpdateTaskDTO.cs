@@ -1,8 +1,7 @@
 namespace TodoApi.DTO
 {
-    public class TaskDTO
+    public class UpdateTaskDTO
     {
-        public long Id { get; set; }
         public string Name { get; set; }
         public int Status { get; set; }
     }
