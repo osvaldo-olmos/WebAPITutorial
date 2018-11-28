@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using TaskApi.DTO;
+using TaskApi.Extensions;
 using TaskApi.Models;
 using TodoApi.DTO;
 
@@ -49,7 +50,7 @@ namespace TaskApi.Controllers
         [HttpPost]
         public IActionResult Create(CreateTaskDTO taskDTO)
         {
-            TaskItem task =_mapper.Map<TaskItem>(taskDTO);
+            TaskItem task = _mapper.Map<TaskItem>(taskDTO);
             _context.TaskItems.Add(task);
             _context.SaveChanges();
 
@@ -59,7 +60,7 @@ namespace TaskApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(long id, UpdateTaskDTO item)
         {
-            TaskItem updatedTask =_mapper.Map<TaskItem>(item);
+            TaskItem updatedTask = _mapper.Map<TaskItem>(item);
 
             var task = _context.TaskItems.Find(id);
             if (task == null)
@@ -67,11 +68,9 @@ namespace TaskApi.Controllers
                 return NotFound();
             }
 
-            //Si el item esta finalizado, no se puede updetear
-            if(task.Status == TaskStatus.Canceled &&
-            updatedTask.Status == TaskStatus.Done)
+            if (task.Status.isFinalStatus())
             {
-                return BadRequest("No se puede pasar una tarea cancelada a finalizada");
+                return BadRequest("La tarea se encuentra en un estado final, no puede ser modificada");
             }
 
             task.Status = updatedTask.Status;
